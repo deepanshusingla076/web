@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Attendance Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background-color: #eef2f3;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            background: #fff;
+            width: 280px;
+            height: auto;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            border-radius: 10px;
+            top: 20px;
+            bottom: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin: 20px 10px;
+        }
+
+        .logo i {
+            font-size: 24px;
+            margin-right: 15px;
+            color: #333;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 10px 0;
+        }
+
+        nav a {
+            color: #333;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        nav a i {
+            margin-right: 10px;
+        }
+
+        nav a:hover {
+            background: #eee;
+            color: #000;
+        }
+
+        .main-container {
+            margin-left: 300px;
+            max-width: 900px;
+            gap: 20px;
+            flex-grow: 1;
+            padding: 0px;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .form-section,
+        .attendance-records {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                position: relative;
+                width: 100%;
+                height: auto;
+                margin-bottom: 20px;
+            }
+
+            .main-container {
+                margin-left: 0;
+                padding: 0 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            input[type="text"],
+            input[type="date"],
+            select {
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th,
+            td {
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav ul li {
+                margin: 5px 0;
+            }
+
+            button {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <i class="fas fa-user-shield"></i>
+            <span>Admin Dashboard</span>
+        </div>
+        <ul>
+            <li><a href="admin.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="admAttendance.html"><i class="fas fa-users"></i> Attendance</a></li>
+            <li><a href="admProject.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
+            <li><a href="empAttendance.html"><i class="fas fa-user"></i> Employee Attendance</a></li>
+            <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-container">
+        <div class="container">
+            <div class="form-section">
+                <h2>Mark Attendance</h2>
+                <form id="attendanceForm">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" required>
+
+                    <label for="teamLeader">Team Leader:</label>
+                    <select id="teamLeader" required>
+                        <option value="">Select Team Leader</option>
+                        <option value="John Doe">John Doe (Team A)</option>
+                        <option value="Jane Smith">Jane Smith (Team B)</option>
+                        <option value="Mike Johnson">Mike Johnson (Team C)</option>
+                        <option value="Sarah Williams">Sarah Williams (Team D)</option>
+                    </select>
+
+                    <label for="teamMember">Team Member:</label>
+                    <select id="teamMember" required>
+                        <option value="">Select Team Member</option>
+                    </select>
+
+                    <label for="employeeId">Employee ID:</label>
+                    <input type="text" id="employeeId" name="employeeId" readonly required>
+
+                    <label for="attendance">Attendance:</label>
+                    <select id="attendance" name="attendance" required>
+                        <option value="">Select Attendance</option>
+                        <option value="Present">Present</option>
+                        <option value="Absent">Absent</option>
+                        <option value="Leave">Leave</option>
+                    </select>
+
+                    <button type="submit">Submit Attendance</button>
+                </form>
+            </div>
+
+            <div class="attendance-records">
+                <h2>Attendance Records</h2>
+                <table id="attendanceTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Team Leader</th>
+                            <th>Team Member</th>
+                            <th>Employee ID</th>
+                            <th>Attendance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const teamMembers = {
+                "John Doe": ["Alice Johnson", "Bob Smith", "Charlie Brown"],
+                "Jane Smith": ["Dave Wilson", "Eve Davis", "Frank Miller"],
+                "Mike Johnson": ["Grace Lee", "Heidi Kim", "Ivan Garcia"],
+                "Sarah Williams": ["Judy Taylor", "Mallory Anderson", "Niaj Thompson"]
+            };
+
+            const teamLeaderSelect = document.getElementById("teamLeader");
+            const teamMemberSelect = document.getElementById("teamMember");
+            const employeeIdInput = document.getElementById("employeeId");
+            const attendanceForm = document.getElementById("attendanceForm");
+            const attendanceTableBody = document.querySelector("#attendanceTable tbody");
+
+            function saveAttendanceData(data) {
+                let attendanceData = JSON.parse(localStorage.getItem('attendanceData')) || [];
+                attendanceData.push(data);
+                localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
+            }
+
+            function loadAttendanceData() {
+                let attendanceData = JSON.parse(localStorage.getItem('attendanceData')) || [];
+                attendanceTableBody.innerHTML = '';
+                attendanceData.forEach(data => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${data.date}</td>
+                        <td>${data.teamLeader}</td>
+                        <td>${data.teamMember}</td>
+                        <td>${data.employeeId}</td>
+                        <td>${data.attendance}</td>
+                    `;
+                    attendanceTableBody.appendChild(row);
+                });
+            }
+
+            teamLeaderSelect.addEventListener("change", function () {
+                const teamLeader = this.value;
+                teamMemberSelect.innerHTML = '<option value="">Select Team Member</option>';
+                if (teamMembers[teamLeader]) {
+                    teamMembers[teamLeader].forEach(member => {
+                        const option = document.createElement("option");
+                        option.value = member;
+                        option.textContent = member;
+                        teamMemberSelect.appendChild(option);
+                    });
+                }
+            });
+
+            attendanceForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const attendanceData = {
+                    date: document.getElementById("date").value,
+                    teamLeader: teamLeaderSelect.value,
+                    teamMember: teamMemberSelect.value,
+                    employeeId: employeeIdInput.value,
+                    attendance: document.getElementById("attendance").value
+                };
+
+                saveAttendanceData(attendanceData);
+                loadAttendanceData();
+                attendanceForm.reset();
+                teamMemberSelect.innerHTML = '<option value="">Select Team Member</option>';
+            });
+
+            loadAttendanceData();
+        });
+    </script>
+</body>
+
+</html>

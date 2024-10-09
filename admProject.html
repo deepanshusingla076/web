@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Project Management System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background-color: #eef2f3;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+        }
+
+        nav {
+            background: #fff;
+            width: 280px;
+            height: 100%;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            border-radius: 10px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin: 20px 10px;
+        }
+
+        .logo i {
+            font-size: 24px;
+            margin-right: 15px;
+            color: #333;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 10px 0;
+        }
+
+        nav a {
+            color: #333;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        nav a i {
+            margin-right: 10px;
+        }
+
+        nav a:hover {
+            background: #eee;
+            color: #000;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        .container {
+            width: 850px;
+            margin-left: 300px;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="date"], select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .status-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .not-started {
+            background-color: #dc3545;
+        }
+
+        .in-progress {
+            background-color: #ffc107;
+        }
+
+        .completed {
+            background-color: #28a745;
+        }
+
+        #teamMembers {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-radius: 0;
+            }
+
+            .container {
+                width: 100%;
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            h1, h2 {
+                font-size: 1.5em;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            nav ul li {
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <i class="fas fa-user-shield"></i>
+            <span>Admin Dashboard</span>
+        </div>
+        <ul>
+            <li><a href="admin.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="admAttendance.html"><i class="fas fa-users"></i> Attendance</a></li>
+            <li><a href="admProject.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
+            <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Project Management System</h1>
+        <h2>Assign Project</h2>
+        <form id="projectForm">
+            <label for="projectName">Project Name:</label>
+            <input type="text" id="projectName" name="projectName" required>
+
+            <label for="teamLeader">Select Team Leader:</label>
+            <select id="teamLeader" required>
+                <option value="">Select Team Leader</option>
+                <option value="John Doe">John Doe (Team A)</option>
+                <option value="Jane Smith">Jane Smith (Team B)</option>
+                <option value="Mike Johnson">Mike Johnson (Team C)</option>
+                <option value="Sarah Williams">Sarah Williams (Team D)</option>
+            </select>
+
+            <div id="teamMembers" style="display:none;">
+                <label for="members">Team Members:</label>
+                <div id="members"></div>
+            </div>
+
+            <label for="deadline">Deadline:</label>
+            <input type="date" id="deadline" name="deadline" required>
+
+            <button type="submit">Assign Project</button>
+        </form>
+<br>
+        <h2>Project Records</h2>
+        <table id="projectTable">
+            <thead>
+                <tr>
+                    <th>Project Name</th>
+                    <th>Assignee</th>
+                    <th>Deadline</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const teamMembersData = {
+            "John Doe": ["Alice Brown", "Bob Smith", "Charlie Johnson"],
+            "Jane Smith": ["David Wilson", "Emma Davis", "Frank Miller"],
+            "Mike Johnson": ["Grace Lee", "Henry Walker", "Isabella Hall"],
+            "Sarah Williams": ["Jack Taylor", "Lily Brown", "Noah Harris"]
+        };
+
+        window.onload = function() {
+            displayRecords();
+        };
+
+        document.getElementById('projectForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const projectName = document.getElementById('projectName').value;
+            const assignee = document.getElementById('teamLeader').value;
+            const deadline = document.getElementById('deadline').value;
+            const status = 'Not Started';
+            const project = { projectName, assignee, deadline, status };
+
+            let projects = JSON.parse(localStorage.getItem('projectRecords')) || [];
+            projects.push(project);
+            localStorage.setItem('projectRecords', JSON.stringify(projects));
+
+            updateTeamsData(assignee);
+
+            displayRecords();
+            document.getElementById('projectForm').reset();
+            document.getElementById('teamMembers').style.display = 'none';
+        });
+
+        function displayRecords() {
+            const tableBody = document.querySelector('#projectTable tbody');
+            tableBody.innerHTML = '';
+            let projects = JSON.parse(localStorage.getItem('projectRecords')) || [];
+            projects.forEach((project, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = 
+                    `<td>${project.projectName}</td>
+                    <td>${project.assignee}</td>
+                    <td>${project.deadline}</td>
+                    <td>
+                        <button class="status-button ${project.status.toLowerCase().replace(/ /g, '-')}" onclick="changeStatus(${index})">${project.status}</button>
+                    </td>`;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function changeStatus(index) {
+            let projects = JSON.parse(localStorage.getItem('projectRecords'));
+            const currentStatus = projects[index].status;
+            switch (currentStatus) {
+                case 'Not Started':
+                    projects[index].status = 'In Progress';
+                    break;
+                case 'In Progress':
+                    projects[index].status = 'Completed';
+                    break;
+                case 'Completed':
+                    projects[index].status = 'Not Started';
+                    break;
+            }
+            localStorage.setItem('projectRecords', JSON.stringify(projects));
+            displayRecords();
+        }
+
+        document.getElementById('teamLeader').addEventListener('change', function () {
+            const leader = this.value;
+            const membersDiv = document.getElementById('members');
+
+            if (leader) {
+                const members = teamMembersData[leader];
+                membersDiv.innerHTML = members.join(', ');
+                document.getElementById('teamMembers').style.display = 'block';
+            } else {
+                membersDiv.innerHTML = '';
+                document.getElementById('teamMembers').style.display = 'none';
+            }
+        });
+
+        function updateTeamsData(assignee) {
+            const teamMappings = {
+                "John Doe": "teamA",
+                "Jane Smith": "teamB",
+                "Mike Johnson": "teamC",
+                "Sarah Williams": "teamD"
+            };
+            const team = teamMappings[assignee];
+
+            if (team) {
+                const teamsData = JSON.parse(localStorage.getItem('teamsData')) || {
+                    teamA: { assigned: 0, completed: 0 },
+                    teamB: { assigned: 0, completed: 0 },
+                    teamC: { assigned: 0, completed: 0 },
+                    teamD: { assigned: 0, completed: 0 }
+                };
+
+                teamsData[team].assigned += 1;
+                localStorage.setItem('teamsData', JSON.stringify(teamsData));
+            }
+        }
+    </script>
+</body>
+</html>
