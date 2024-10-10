@@ -292,10 +292,10 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const teamMembers = {
-                "John Doe": ["Alice Johnson", "Bob Smith", "Charlie Brown"],
-                "Jane Smith": ["Dave Wilson", "Eve Davis", "Frank Miller"],
-                "Mike Johnson": ["Grace Lee", "Heidi Kim", "Ivan Garcia"],
-                "Sarah Williams": ["Judy Taylor", "Mallory Anderson", "Niaj Thompson"]
+                "John Doe": { "Alice Johnson": "EMP001", "Bob Smith": "EMP002", "Charlie Brown": "EMP003" },
+                "Jane Smith": { "Dave Wilson": "EMP004", "Eve Davis": "EMP005", "Frank Miller": "EMP006" },
+                "Mike Johnson": { "Grace Lee": "EMP007", "Heidi Kim": "EMP008", "Ivan Garcia": "EMP009" },
+                "Sarah Williams": { "Judy Taylor": "EMP010", "Mallory Anderson": "EMP011", "Niaj Thompson": "EMP012" }
             };
 
             const teamLeaderSelect = document.getElementById("teamLeader");
@@ -330,12 +330,23 @@
                 const teamLeader = this.value;
                 teamMemberSelect.innerHTML = '<option value="">Select Team Member</option>';
                 if (teamMembers[teamLeader]) {
-                    teamMembers[teamLeader].forEach(member => {
+                    Object.keys(teamMembers[teamLeader]).forEach(member => {
                         const option = document.createElement("option");
                         option.value = member;
                         option.textContent = member;
                         teamMemberSelect.appendChild(option);
                     });
+                }
+                employeeIdInput.value = '';
+            });
+
+            teamMemberSelect.addEventListener("change", function () {
+                const teamLeader = teamLeaderSelect.value;
+                const teamMember = this.value;
+                if (teamMembers[teamLeader] && teamMembers[teamLeader][teamMember]) {
+                    employeeIdInput.value = teamMembers[teamLeader][teamMember];
+                } else {
+                    employeeIdInput.value = '';
                 }
             });
 
@@ -353,6 +364,7 @@
                 loadAttendanceData();
                 attendanceForm.reset();
                 teamMemberSelect.innerHTML = '<option value="">Select Team Member</option>';
+                employeeIdInput.value = '';
             });
 
             loadAttendanceData();
